@@ -2,7 +2,7 @@
 resource "google_container_cluster" "primary" {
   provider = google-beta
 
-  name     = "${var.project_id}-${var.member_id}-dev"
+  name     = "${var.project_id}-${var.member_id}-prd"
   location = var.region
   node_locations = var.zones
 
@@ -49,7 +49,7 @@ resource "google_container_node_pool" "primary_nodes" {
 
     # preemptible  = true
     machine_type = var.machine_type
-    tags         = ["gke-node", "${var.project_id}-${var.member_id}-dev"]
+    tags         = ["gke-node", "${var.project_id}-${var.member_id}-prd"]
     metadata = {
       disable-legacy-endpoints = "true"
     }
@@ -65,4 +65,4 @@ module "gke_auth" {
   location     = google_container_cluster.primary.location
 }
  
-resource "kubernetes_namespace" "default" {}
+# resource "kubernetes_namespace" "default" {}
