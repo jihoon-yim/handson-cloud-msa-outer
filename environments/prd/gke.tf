@@ -27,6 +27,20 @@ resource "google_container_cluster" "primary" {
       issue_client_certificate = false
     }
   }
+
+  cluster_autoscaling {
+    enabled = true
+    resource_limits {
+      resource_type = "cpu"
+      minimum = 4
+      maximum = 16
+    }
+    resource_limits {
+      resource_type = "memory"
+      minimum = 15
+      maximum = 60
+    }
+  }
 }
 
 # Separately Managed Node Pool
@@ -34,7 +48,7 @@ resource "google_container_node_pool" "primary_nodes" {
   name       = "${google_container_cluster.primary.name}-np"
   location   = var.region
   cluster    = google_container_cluster.primary.name
-  node_count = var.gke_num_nodes
+  # node_count = var.gke_num_nodes
 
   node_config {
     oauth_scopes = [
@@ -53,6 +67,11 @@ resource "google_container_node_pool" "primary_nodes" {
     metadata = {
       disable-legacy-endpoints = "true"
     }
+  }
+
+  autoscaling {
+    min_node_count = 2
+    max_node_count = 4
   }
 }
 
