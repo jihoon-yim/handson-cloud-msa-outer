@@ -8,6 +8,7 @@ spec:
   selector:
     matchLabels:
       app: eshop-frontend
+  replicas: 2
   template:
     metadata:
       labels:
